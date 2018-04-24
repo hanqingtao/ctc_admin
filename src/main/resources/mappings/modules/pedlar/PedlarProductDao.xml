@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ambition.agile.modules.pedlar.dao.PedlarProductDao">
+    
+	<sql id="pedlarProductColumns">
+		a.id AS "id",
+		a.catalog_id AS "catalogId",
+		a.pedlar_id AS "pedlarId",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.sort AS "sort"
+	</sql>
+	
+	<sql id="pedlarProductJoins">
+	</sql>
+    
+	<select id="get" resultType="PedlarProduct">
+		SELECT 
+			<include refid="pedlarProductColumns"/>
+		FROM pedlar_product a
+		<include refid="pedlarProductJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="PedlarProduct">
+		SELECT 
+			<include refid="pedlarProductColumns"/>
+		FROM pedlar_product a
+		<include refid="pedlarProductJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="PedlarProduct">
+		SELECT 
+			<include refid="pedlarProductColumns"/>
+		FROM pedlar_product a
+		<include refid="pedlarProductJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO pedlar_product(
+			catalog_id,
+			pedlar_id,
+			create_by,
+			create_date,
+			sort
+		) VALUES (
+			#{catalogId},
+			#{pedlarId},
+			#{createBy.id},
+			#{createDate},
+			#{sort}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE pedlar_product SET 	
+			catalog_id = #{catalogId},
+			pedlar_id = #{pedlarId},
+			sort = #{sort}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM pedlar_product
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

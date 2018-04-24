@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ambition.agile.modules.pedlar.dao.PedlarDao">
+    
+	<sql id="pedlarColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.market_id AS "marketId",
+		a.user_id AS "user.id",
+		a.market_name AS "marketName",
+		a.logo_path AS "logoPath",
+		a.main_product AS "mainProduct",
+		a.content AS "content",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.status AS "status",
+		a.audit_by AS "auditBy.id",
+		a.audit_date AS "auditDate",
+		u4.name AS "user.name"
+	</sql>
+	
+	<sql id="pedlarJoins">
+		LEFT JOIN sys_user u4 ON u4.id = a.user_id
+		LEFT JOIN sys_user u9 ON u9.id = a.create_by
+		LEFT JOIN sys_user u11 ON u11.id = a.update_by
+		LEFT JOIN sys_user u16 ON u16.id = a.audit_by
+	</sql>
+    
+	<select id="get" resultType="Pedlar">
+		SELECT 
+			<include refid="pedlarColumns"/>
+		FROM pedlar a
+		<include refid="pedlarJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Pedlar">
+		SELECT 
+			<include refid="pedlarColumns"/>
+		FROM pedlar a
+		<include refid="pedlarJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Pedlar">
+		SELECT 
+			<include refid="pedlarColumns"/>
+		FROM pedlar a
+		<include refid="pedlarJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO pedlar(
+			name,
+			market_id,
+			user_id,
+			market_name,
+			logo_path,
+			main_product,
+			content,
+			create_by,
+			create_date,
+			remarks,
+			del_flag,
+			status
+		) VALUES (
+			#{name},
+			#{marketId},
+			#{user.id},
+			#{marketName},
+			#{logoPath},
+			#{mainProduct},
+			#{content},
+			#{createBy.id},
+			#{createDate},
+			#{remarks},
+			#{delFlag},
+			#{status}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE pedlar SET 	
+			name = #{name},
+			market_id = #{marketId},
+			user_id = #{user.id},
+			market_name = #{marketName},
+			logo_path = #{logoPath},
+			main_product = #{mainProduct},
+			content = #{content},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			status = #{status},
+			audit_by = #{auditBy.id},
+			audit_date = #{auditDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE pedlar SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
