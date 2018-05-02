@@ -1,27 +1,41 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
  <%@ include file="/WEB-INF/views/center/common/meta.jsp"%> 
- <script type="text/javascript" src="${ctxStatic}/js/jquery.flexslider-min.js" ></script>
- <script type="text/javascript" src="${ctxStatic}/js/index.js"></script>
- <script type="text/javascript" src="${ctxStatic}/js/Designer.js"></script>
+ 
+ <link href="${ctxStatic}/css/index.css" rel="stylesheet" type="text/css" />
+ 
+ 
  <head>
     <meta name="renderer" content="webkit">
  </head>
+  <script type="text/javascript" src="${ctxStatic}/js/map/baiduDitu.js"></script>
+<!-- <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=XOqpyuEGGwap3D2p6j4NIR2BrogIxDpX&v"></script> -->
+<script type="text/javascript" src="${ctxStatic}/js/map/TextIconOverlay_min.js"></script>
+<script type="text/javascript" src="${ctxStatic}/js/map/MarkerClusterer_min.js"></script>
+<script type="text/javascript" src="${ctxStatic}/js/map/AreaRestriction_min.js"></script>
+
 <body style="background:#fff;">
 <span id="message" class="uploadFile">${message }</span>
 <div class="header">
 	<%@ include file="/WEB-INF/views/center/common/top.jsp"%> 
     <%@ include file="/WEB-INF/views/center/common/nav.jsp"%> 
 </div>
+
+ <div >
+   <div id="allmap"></div>
+ </div>
+
+
+ 	<!--
  <div id="pageContaienr">
-    <div id="test"></div>
-   <div id="Flexslider" class="flexslider">
+ 	<div id="test"></div>
+ 	<div id="Flexslider" class="flexslider">
              <ul class="slides" id="bannerContainer">
                  
                  
              </ul>
         </div>
- 
-<div class="main">
+ 	
+	<div class="main">
     <div class="all" id='all'>
         <div class="screen">
             <ul id="screenContainer"></ul>
@@ -133,18 +147,153 @@
             <p class="on">友情链接</p>
         </div>
         <a href="http://www.miit.gov.cn/" target="_blank">中华人民共和国工业和信息化部</a>
-     	<a href="http://www.ndrc.gov.cn/" target="_blank">中华人民共和国国家发展和改革委员会</a>
-     	<a href="http://www.mofcom.gov.cn/" target="_blank">中华人民共和国商务部</a>
-     	<a href="http://www.mohurd.gov.cn/" target="_blank">中华人民共和国住房和城乡建设部</a>
-     	<a href="http://www.mof.gov.cn/index.htm" target="_blank">中华人民共和国财政部</a>
-     	<a href="http://www.365trade.com.cn/" target="_blank">中招联合信息股份有限公司</a>
-     	<a href="http://www.cec.gov.cn/" target="_blank">中国招标投标网</a>
         <div class="clear"></div>
     </div>
 </div>
  </div>
+-->
  
    <%@ include file="/WEB-INF/views/center/common/footer.jsp"%>
-   
+    <style type="text/css">
+                #allmap {
+                    width: 1024px;
+                    height: 768px;
+                    margin: 5px auto;
+                }
+                .anchorBL {
+                    display: none;
+                }
+                 #msg{
+                  width:100px;
+                  height:20px;
+                  margin-left:15px;
+                  color:red;
+                  display:none;
+                 }
+ 
+         </style>
+   <script type="text/javascript">
+       	
+        	// 百度地图API功能
+            var map = new BMap.Map("allmap", {
+                   minZoom:5,maxZoom:16,enableMapClick : false
+            });
+        	map.centerAndZoom("锡林浩特",11);      // 初始化地图,用城市名设置地图中心点
+          //  map.centerAndZoom(new BMap.Point(105.331398, 37.897445), 5); //设置 中国
+            map.enableScrollWheelZoom();
+            //map.disableDragging(); 
+            //添加放大和缩小控件
+            map.addControl(new BMap.NavigationControl());
+            var oveCtrl = new BMap.OverviewMapControl();
+            map.addControl(oveCtrl);
+            oveCtrl.changeView();
+            oveCtrl.setSize(new BMap.Size(200, 200));
+
+            var myStyles = [{
+                url:  '../static/images/big11.png',
+                size: new BMap.Size(38, 68),
+                opt_anchor: [16, 0],
+                textColor: '#ffffff',
+                opt_textSize: 10
+            }];
+           
+            var myIcon2 = new BMap.Icon("../static/images/red.png", new BMap.Size(30, 40));
+            //添加聚合效果。
+            var markersTemp = new Array();
+	        var markerClusterer = new BMapLib.MarkerClusterer(map, {
+	               markers : markersTemp
+	        });
+	        markerClusterer.setStyles(myStyles);
+	        
+	        function searchStation(){
+                
+               /*  var orgName=$("#orgName").val();
+               
+                var options=$("#orgArea option:selected");  //获取选中的项
+                var areaCode=options.val();   //拿到选中项的值 */
+                var category="";
+               /* if(areaCode == ""&&(orgName == "" ||orgName.trim().length==0)){
+                    alert("请选择省份!");
+                    return ;
+                }*/
+                
+                /*if(orgName.length==0&&orgName.trim().length==0&&areaCode==""){
+                    //alert("请输入要搜索学校的名称或者省份");
+                }*/
+                
+               /*  if($("#btn_1").val()=="高校"){
+                    category=101;
+                } */
+                 //这里是按学校名查,地区和类型为默认
+                 map.clearOverlays();
+                     
+                 $.ajax({
+                       type : "get",
+                       url : "http://www.qiusuo.net.cn/area/getOrgList",
+                       data : {
+                           
+                            "orgName":orgName,
+                            "areaCode":areaCode,
+                             "category":category
+                              
+                       },
+                       success : function(data) {
+                            if(data.length==0){
+                                $("#msg").html("未查到相关信息").show();
+                            }else{
+                            $("#msg").hide();
+                            }
+                            init(data);
+                       },
+                       error : function(e) {
+                              $("#msg").html("请重新搜索").show();
+                               
+                       }
+                   });
+                 } 
+	        
+            function init(data){
+            	
+            	//initMap();
+                var markers = new Array();
+                $.each(data,function(i, item) {
+                    var point = new BMap.Point(item.longitude, item.latitude);
+                    var marker = new BMap.Marker(point);
+                                        marker.setIcon(myIcon2)
+                                        var content = "<h4 style=' '>"+item.customer_name+"</h4>"+"<a href='http://"+item.domain+"' target='_blank'><img style='width:220px;height:55px' src='"+item.logo_path+"'/>";
+                                        addClickHandler(content, marker); //添加点击事件
+                                        markers.push(marker);
+                                        
+                });
+               
+                markerClusterer.clearMarkers();
+                markerClusterer.addMarkers(markers);
+                var opts = {
+                    width : 230, // 信息窗口宽度
+                    height : 80, // 信息窗口高度
+                    enableMessage : true
+                //设置允许信息窗发送短息
+                };
+
+                function addClickHandler(content, marker) {
+                    marker.addEventListener("click", function(e) {
+                        openInfo(content, e)
+                    });
+                }
+                function openInfo(content, e) {
+                    var p = e.target;
+                    var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+                    var infoWindow = new BMap.InfoWindow(content, opts); // 创建信息窗口对象
+                    map.openInfoWindow(infoWindow, point); //开启信息窗口
+                }
+            }
+        </script>
  </body>
+ 
+ 
+ <script type="text/javascript" src="${ctxStatic}/js/jquery.flexslider-min.js" ></script>
+ <!-- 
+ <script type="text/javascript" src="${ctxStatic}/js/index.js"></script>
+ <script type="text/javascript" src="${ctxStatic}/js/Designer.js"></script>
+  -->
 </html>

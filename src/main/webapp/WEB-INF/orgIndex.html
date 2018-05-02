@@ -1,0 +1,466 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+<meta http-equiv="X-UA-Compatible" content="IE=9" />
+<title>中国求索网-首页</title>
+<link href="http://www.qiusuo.net.cn/static/css/global.css" rel="stylesheet" type="text/css" />
+<link href="http://www.qiusuo.net.cn/static/css/index.css" rel="stylesheet" type="text/css" />
+
+<script>
+    var basePath = 'http://www.qiusuo.net.cn';
+</script>
+<script src="../static/js/jquery.min.js"></script>
+<script src="../static/js/bootstrap.js"></script>
+<script src="../static/js/jquery.placeholder.min.js"></script>
+<script src="http://www.qiusuo.net.cn/static/platformjs/login.js"></script>
+<script src="http://www.qiusuo.net.cn/static/platformjs/index.js"></script>
+<script type="text/javascript" src="js/baiduDitu.js"></script>
+<!-- <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=XOqpyuEGGwap3D2p6j4NIR2BrogIxDpX&v"></script> -->
+<script type="text/javascript" src="js/TextIconOverlay_min.js"></script>
+<script type="text/javascript" src="js/MarkerClusterer_min.js"></script>
+<script type="text/javascript" src="js/AreaRestriction_min.js"></script>
+</head>
+<body> 
+
+    <div class="header_wrap">
+
+    </div>
+    <!--header over-->
+<!-- 加载显示内容 -->
+    <div id="content_div" >
+    <!--main_con over-->
+    <div class="main_con">
+        <div class="c_title_item">
+            <span class="f_h2">全部入驻单位</span>
+            <span class="line"></span>
+        </div>
+        <div class="text_align_center">
+            
+            <input type="button" id="btn_1" onclick="requestType(this)"  value="高校"  class="c_current"/>
+            <input type="button" id="btn_2" onclick="requestType(this)"  value="政府"  class="c_d_item"/> 
+            <input type="button" id="btn_3"  onclick="requestType(this)"  value="企业" class="c_d_item"/> 
+            <br/>  
+            <div id="container">
+               名称：<input id="orgName"   type="text" style="margin-right:30px" placeholder="请输入学校名称" />
+               地区：<select style="margin-right:30px" name="" id="orgArea">
+                <option value="">所有</option>
+                <option value="0-1-">北京市</option>
+                <option value="0-2-">天津市</option>
+                <option value="0-3-">河北省</option>
+                <option value="0-4-">山西省</option>
+                <option value="0-5-">内蒙古自治区</option>
+                <option value="0-6-">辽宁省</option>
+                <option value="0-7-">吉林省</option>
+                <option value="0-8-">黑龙江省</option>
+                <option value="0-9-">上海市</option>
+                <option value="0-10-">江苏省</option>
+                <option value="0-11-">浙江省</option>
+                <option value="0-12-">安徽省</option>
+                <option value="0-13-">福建省</option>
+                <option value="0-14-">江西省</option>
+                <option value="0-15-">山东省</option>
+                <option value="0-16-">河南省</option>
+                <option value="0-17-">湖北省</option>
+                <option value="0-18-">湖南省</option>
+                <option value="0-19-">广东省</option>
+                <option value="0-20-">广西壮族自治区</option>
+                <option value="0-21-">海南省</option>
+                <option value="0-22-">重庆市</option>
+                <option value="0-23-">四川省</option>
+                <option value="0-24-">贵州省</option>
+                <option value="0-25-">云南省</option>
+                <option value="0-26-">西藏自治区</option>
+                <option value="0-27-">陕西省</option>
+                <option value="0-28-">甘肃省</option>
+                <option value="0-29-">青海省</option>
+                <option value="0-30-">宁夏回族自治区</option>
+                <option value="0-31-">新疆维吾尔自治区</option>
+                <option value="0-32-">香港特别行政区</option>
+                <option value="0-33-">澳门特别行政区</option>
+                <option value="0-34-">台湾省</option>
+          </select>
+             <!-- 类型：<select style="margin-right:30px" name="" id="orgType">
+                <option value="0">全部</option>
+                <option value="1">高校</option>
+                <option value="2">政府</option>
+                <option value="3">企业</option>
+                </select>-->
+             <!-- <input type="radio" name="cata" checked value="1">高校
+                <input type="radio" name="cata" value="2">政府
+                <input type="radio" name="cata" value="3">企业-->
+                <input type="button" style="margin-left:15px;width:50px;height:25px;cursor:pointer" onclick="searchOrg()" value="查询"> <span id="msg"></span>
+            
+         
+        <div id="allmap"> </div>
+            
+        </div><!-- 
+        <div id="orgContainer" style="display:none;width:100%;min-height:200px;">
+               <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                <tbody id="tr_content">
+                </tbody>
+            </table>
+         
+        </div>-->
+        <script>
+        function requestType(obj) {
+            
+            for(var i=1;i<=3;i++){
+                var but_id = "btn_"+i;
+                if( "btn_"+i == obj.id ){
+                    document.getElementById("btn_"+i).style.background ="#e11d23";
+                    document.getElementById("btn_"+i).style.color ="#fff";
+                                       
+                }else{
+                    document.getElementById("btn_"+i).style.background ="#fff";
+                    document.getElementById("btn_"+i).style.color ="#000";
+                    document.getElementById("btn_"+i).style.border="1px solid #ccc";
+                }
+            }
+            if(obj.id=="btn_1"){
+                $("#container").show();
+                $("#orgContainer").hide();
+            }
+            if(obj.id=="btn_2"){
+                $("#container").hide();
+                $("#orgContainer").show();
+                 $.ajax({
+                        type : "get",
+                        url : "http://www.qiusuo.net.cn/area/getOrgList",
+                        data : {
+                         "searchName":"",
+                          "areaCode":"",
+                          //"category":"2"
+                          "category":"102"
+                        },
+                        success : function(data) {
+                            
+                        	var str= '<tr>';
+                            for(var j=0; j<data.length; j++) {
+								 var tds = '<td style="width:25%"><a href="http://'+data[j].domain+'" target="_blank"><img src="'+data[j].logo_path+'"><p>'+data[j].name+'</p></a></td>';
+                                   str += tds;
+								 if((j+1)%4==0){
+									str = str +"</tr><tr>";
+								 }
+                            }
+                            str = str +"</tr>";
+                        
+                           $('#tr_content').html(str);
+
+                        },
+                        error : function(e) {
+                            alert("获取失败");
+                        }
+                    });
+                
+            }
+            if(obj.id=="btn_3"){
+                $("#container").hide();
+                $("#orgContainer").show();
+                 $.ajax({
+                        type : "get",
+                        url : "http://www.qiusuo.net.cn/area/getOrgList",
+                        data : {
+                          //"category":"3"
+                          "category":"103"
+                        },
+                        success : function(data) {
+                        	var str= '<tr>';
+                            for(var j=0; j<data.length; j++) {
+								 var tds = '<td style="width:25%"><a href="http://'+data[j].domain+'" target="_blank"><img src="'+data[j].logo_path+'"><p>'+data[j].name+'</p></a></td>';
+                                   str += tds;
+								 if((j+1)%4==0){
+									str = str +"</tr><tr>";
+								 }
+                            }
+                            str = str +"</tr>";
+                        
+                           $('#tr_content').html(str);
+                             
+                        },
+                        error : function(e) {
+                            alert("获取失败");
+                        }
+                    });
+            }
+        }
+        
+             function searchOrg(){
+                 
+                 var orgName=$("#orgName").val();
+                
+                 var options=$("#orgArea option:selected");  //获取选中的项
+                 var areaCode=options.val();   //拿到选中项的值
+                 var category="";
+                /* if(areaCode == ""&&(orgName == "" ||orgName.trim().length==0)){
+                     alert("请选择省份!");
+                     return ;
+                 }*/
+                 
+                 /*if(orgName.length==0&&orgName.trim().length==0&&areaCode==""){
+                     //alert("请输入要搜索学校的名称或者省份");
+                 }*/
+                 
+                 /* if($("#btn_1").val()=="高校"){
+                     category=101;
+                 } */
+                  //这里是按学校名查,地区和类型为默认
+                  map.clearOverlays();
+                      
+                  $.ajax({
+                        type : "get",
+                        url : "http://www.qiusuo.net.cn/area/getOrgList",
+                        data : {
+                             "orgName":orgName,
+                             "areaCode":areaCode,
+                              "category":category
+                               
+                        },
+                        success : function(data) {
+                             if(data.length==0){
+                                 $("#msg").html("未查到相关信息").show();
+                             }else{
+                             $("#msg").hide();
+                             }
+                             init(data);
+                        },
+                        error : function(e) {
+                               $("#msg").html("请重新搜索").show();
+                                
+                        }
+                    });
+                  } 
+        </script>
+    </div>
+    <!--main_con over-->
+        <style type="text/css">
+                #allmap {
+                    width: 1024px;
+                    height: 768px;
+                    margin: 20px auto;
+                }
+                .anchorBL {
+                    display: none;
+                }
+                 #msg{
+                  width:100px;
+                  height:20px;
+                  margin-left:15px;
+                  color:red;
+                  display:none;
+                 }
+ 
+         </style>
+        
+     
+        <script type="text/javascript">
+       	
+        	// 百度地图API功能
+            var map = new BMap.Map("allmap", {
+                   minZoom:5,maxZoom:16,enableMapClick : false
+            });
+            map.centerAndZoom(new BMap.Point(105.331398, 37.897445), 5);
+            map.enableScrollWheelZoom();
+            //map.disableDragging(); 
+
+            //添加放大和缩小控件
+            map.addControl(new BMap.NavigationControl());
+            var oveCtrl = new BMap.OverviewMapControl();
+            map.addControl(oveCtrl);
+            oveCtrl.changeView();
+            oveCtrl.setSize(new BMap.Size(200, 200));
+
+            var myStyles = [{
+                url:  '../static/images/big11.png',
+                size: new BMap.Size(38, 68),
+                opt_anchor: [16, 0],
+                textColor: '#ffffff',
+                opt_textSize: 10
+            }];
+           
+            var myIcon2 = new BMap.Icon("../static/images/red.png", new BMap.Size(30, 40));
+            //添加聚合效果。
+            var markersTemp = new Array();
+	        var markerClusterer = new BMapLib.MarkerClusterer(map, {
+	               markers : markersTemp
+	        });
+	        markerClusterer.setStyles(myStyles);
+	        
+            function init(data){
+            	
+            	//initMap();
+                
+                var markers = new Array();
+                $.each(data,function(i, item) {
+                    var point = new BMap.Point(item.longitude, item.latitude);
+                    var marker = new BMap.Marker(point);
+                                        marker.setIcon(myIcon2)
+                                        var content = "<h4 style=' '>"+item.customer_name+"</h4>"+"<a href='http://"+item.domain+"' target='_blank'><img style='width:220px;height:55px' src='"+item.logo_path+"'/>";
+                                        addClickHandler(content, marker); //添加点击事件
+                                        markers.push(marker);
+                                        
+                });
+               
+                markerClusterer.clearMarkers();
+                markerClusterer.addMarkers(markers);
+
+                
+                
+                
+                var opts = {
+                    width : 230, // 信息窗口宽度
+                    height : 80, // 信息窗口高度
+                    enableMessage : true
+                //设置允许信息窗发送短息
+                };
+
+                function addClickHandler(content, marker) {
+                    marker.addEventListener("click", function(e) {
+                        openInfo(content, e)
+                    });
+                }
+                function openInfo(content, e) {
+                    var p = e.target;
+                    var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+                    var infoWindow = new BMap.InfoWindow(content, opts); // 创建信息窗口对象
+                    map.openInfoWindow(infoWindow, point); //开启信息窗口
+                }
+                    //initMapColor(); 
+            }
+           
+            
+            function initMapColor(){
+            	
+            	map.addOverlay(heBei);//添加省份
+                map.addOverlay(henan);
+                map.addOverlay(shandong);
+                map.addOverlay(shanxi);
+                map.addOverlay(shanxi_);
+                map.addOverlay(neimeng);
+                map.addOverlay(heiLongJiang);
+                map.addOverlay(jiLin);
+                map.addOverlay(liaoNing);
+                map.addOverlay(jiangSu);
+                map.addOverlay(ningXia);
+                map.addOverlay(ganSu);
+                map.addOverlay(xinJiang);
+                map.addOverlay(qingHai);
+                map.addOverlay(xiZang);
+                map.addOverlay(siShuan);
+                map.addOverlay(yunNan);
+                map.addOverlay(huBei);
+                map.addOverlay(anHui);
+                map.addOverlay(chongQing);
+                map.addOverlay(zheJiang);
+                map.addOverlay(guiZhou);
+                map.addOverlay(huNan);
+                map.addOverlay(jiangXi);
+                map.addOverlay(fuJian);
+                map.addOverlay(guangDong);
+                map.addOverlay(guangXi);
+                map.addOverlay(beiJing);
+                map.addOverlay(tianJin);
+                map.addOverlay(haiNanSheng);
+                map.addOverlay(xiangGang);
+                map.addOverlay(shangHai); 
+            }
+            
+            //initMapColor();
+        </script>
+    </div>
+    </div>
+   <!--footer begin-->
+    <div class="footer">
+        <div class="footer_in">
+        	<div class="fl">
+            	<p><a href="javascript: footerClick('li_a_index')">首页</a>
+            	<a href="javascript: footerClick('li_a_course')">课程</a>
+            	<a target="_blank" href="http://static.lllnet.cn/platform/cultural/index.html" >文化中国</a>
+            	<a href="http://www.qiusuo.net.cn/map/orgIndex.html">求索e学</a>
+            	 <a href="javascript: footerClick('li_a_aboutUs')">求索音像出版社</a>
+            	  <a href="javascript:indexAbout_dir()">目录下载</a>
+            	 <a href="javascript: indexAbout_we()"  id="li_a_aboutUs">关于我们</a> 
+            	 </p>
+            	 
+				 <p>Copyright EDU&SUN Network Services Ltd. All rights reserved. 中共中央党校求索音像出版社版权所有</p>
+                <p>主办单位: 中共中央党校求索音像出版社&nbsp;&nbsp;协办单位：北京爱迪科森教育科技股份有限公司</p>
+				<p>网站备案/许可证号： 京ICP备11016584号-20 </p>
+				 
+            </div>
+            <div class="fr">
+            	<p class="phone">400-898-9889</p>
+				<p class="time">周一到周五 09:00-18:00</p>
+            </div>
+        </div>
+    </div>
+    <!--footer over-->
+     <!--f_btns begin-->
+    <div class="f_btns">
+        <ul>
+        	<li><a data-toggle="modal" data-target="#erweima" id="li_a_app" href="#" title="APP、微信" ><span class="sa1-item"></span><span class="sa2-item">App</span></a></li>
+        	<li><a href="javascript: indexHelp()" title="使用帮助"><span class="sb1-item"></span><span class="sb2-item" >帮助</span></a></li>
+        	<li><a href="http://www.qiusuo.net.cn" title="首页"><span class="sc1-item"></span><span class="sc2-item">首页</span></a></li>
+        	<li><a href="javascript:indexAbout_dir();" title="目录"><span class="se1-item"></span><span class="se2-item">目录</span></a></li>
+        	<li><a href="#" title="返回顶部"><span class="sd1-item"></span><span class="sd2-item"></span></a></li>
+        </ul>
+        
+    </div>
+    <div class="modal fade" id="erweima" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-toggle="modal">
+        <div class="modal-dialognew">
+            <div class="modal-contentnew">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                </div>
+                <div class="modal-body" id="affiche">
+                    <div class="topnew" style="text-align:center;">
+                        <img  src="http://imgqs.bjadks.com/platform/appDownloadMobile.png"/>
+                         <div style="clear:right" >扫描下载求索e学移动端</div> 
+                    </div>
+                     <div class="topnew" style="text-align:center;">
+                        <img   src="http://imgqs.bjadks.com/platform/weixin.jpg"/>
+                         <div style="clear:both">扫描关注求索e学微信号</div> 
+                    </div>
+                    <div class="topnew" style="text-align:center;">
+                        <img   src="http://imgqs.bjadks.com/platform/dingyuehao.jpg"/>
+                         <div style="clear:both">扫描关注求索微学习微信号</div> 
+                    </div>
+                </div>
+            </div>
+             
+        </div>
+    </div>
+     
+    <!--f_btns over-->
+        <script type="text/javascript">
+            $(function() {
+                $('input, textarea').placeholder();
+            });
+            
+        </script>
+        <script type="text/javascript">
+        /**$(function(){
+            $.ajax({
+                type : "get",
+                url : "http://www.qiusuo.net.cn/area/info",
+                data : {
+                     "category":1
+                },
+                success : function(json) {
+                    console.log(json+"信息");
+                     $.each(json,function(i, item) {
+                         $("#orgName").bigAutocomplete({width:504,data:json,callback:function(data){ }}); 
+                         });
+                },
+                error : function(e) {
+                    alert("获取失败");
+                }
+            });
+            
+            
+        
+        })**/
+    </script>
+</body>
+
+</html>

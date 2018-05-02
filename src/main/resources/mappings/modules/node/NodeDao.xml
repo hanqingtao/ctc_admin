@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ambition.agile.modules.node.dao.NodeDao">
+    
+	<sql id="nodeColumns">
+		a.id AS "id",
+		a.line_id AS "lineId",
+		a.name AS "name",
+		a.front AS "before",
+		a.back AS "after",
+		a.sort AS "sort",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.remarks AS "remarks",
+		a.longitude AS "longitude",
+		a.status AS "status",
+		a.latitude AS "latitude"
+	</sql>
+	
+	<sql id="nodeJoins">
+	</sql>
+    
+	<select id="get" resultType="Node">
+		SELECT 
+			<include refid="nodeColumns"/>
+		FROM node a
+		<include refid="nodeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Node">
+		SELECT 
+			<include refid="nodeColumns"/>
+		FROM node a
+		<include refid="nodeJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Node">
+		SELECT 
+			<include refid="nodeColumns"/>
+		FROM node a
+		<include refid="nodeJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO node(
+			line_id,
+			name,
+			front,
+			back,
+			sort,
+			create_by,
+			create_date,
+			remarks,
+			longitude,
+			status,
+			latitude
+		) VALUES (
+			#{lineId},
+			#{name},
+			#{before},
+			#{after},
+			#{sort},
+			#{createBy.id},
+			#{createDate},
+			#{remarks},
+			#{longitude},
+			#{status},
+			#{latitude}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE node SET 	
+			name = #{name},
+			front = #{before},
+			back = #{after},
+			sort = #{sort},
+			remarks = #{remarks},
+			longitude = #{longitude},
+			status = #{status},
+			latitude = #{latitude}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM node
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

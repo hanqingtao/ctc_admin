@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ambition.agile.modules.line.dao.LineDao">
+    
+	<sql id="lineColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.remarks AS "remarks",
+		a.node_count AS "nodeCount",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.status AS "status"
+	</sql>
+	
+	<sql id="lineJoins">
+	</sql>
+    
+	<select id="get" resultType="Line">
+		SELECT 
+			<include refid="lineColumns"/>
+		FROM line a
+		<include refid="lineJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Line">
+		SELECT 
+			<include refid="lineColumns"/>
+		FROM line a
+		<include refid="lineJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Line">
+		SELECT 
+			<include refid="lineColumns"/>
+		FROM line a
+		<include refid="lineJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO line(
+			name,
+			remarks,
+			node_count,
+			create_by,
+			create_date,
+			status
+		) VALUES (
+			#{name},
+			#{remarks},
+			#{nodeCount},
+			#{createBy.id},
+			#{createDate},
+			#{status}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE line SET 	
+			name = #{name},
+			remarks = #{remarks},
+			node_count = #{nodeCount},
+			status = #{status}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM line
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
