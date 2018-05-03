@@ -19,7 +19,7 @@
 var ctx = '${ctx}', ctxStatic='${ctxStatic}',ctxFront='${ctxFront}';
 var imgServer = '${imgServer}';
 </script>
-<script type="text/javascript" src="${ctxStatic}/jquery/jquery-1.9.1.min.js" ></script>
+<script type="text/javascript" src="${ctxStatic}/jquery/jquery-1.10.2.min.js" ></script>
 <script type="text/javascript" src="${ctxStatic}/js/jquery.placeholder.min.js" ></script>
 <script type="text/javascript" src="${ctxStatic}/js/ajaxfileupload.js"></script>
 <script type="text/javascript" src="${ctxStatic}/My97DatePicker/WdatePicker.js" ></script>

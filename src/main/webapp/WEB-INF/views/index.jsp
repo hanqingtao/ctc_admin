@@ -7,11 +7,17 @@
  <head>
     <meta name="renderer" content="webkit">
  </head>
-  <script type="text/javascript" src="${ctxStatic}/js/map/baiduDitu.js"></script>
+ <!-- 
+  <script type="text/javascript" src="${ctxStatic}/jquery/jquery-1.10.2.min.js"></script>
+  -->
+ <script type="text/javascript" src="${ctxStatic}/bootstrap/3.3.5/bootstrap.js"></script>
+ <script type="text/javascript" src="${ctxStatic}/jquery/jquery.flexslider-min.js" ></script>
+ <script type="text/javascript" src="${ctxStatic}/jquery/jquery.placeholder.min.js"></script>
+  <script type="text/javascript" src="${ctxStatic}/map/baiduDitu.js"></script>
 <!-- <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=XOqpyuEGGwap3D2p6j4NIR2BrogIxDpX&v"></script> -->
-<script type="text/javascript" src="${ctxStatic}/js/map/TextIconOverlay_min.js"></script>
-<script type="text/javascript" src="${ctxStatic}/js/map/MarkerClusterer_min.js"></script>
-<script type="text/javascript" src="${ctxStatic}/js/map/AreaRestriction_min.js"></script>
+<script type="text/javascript" src="${ctxStatic}/map/TextIconOverlay_min.js"></script>
+<script type="text/javascript" src="${ctxStatic}/map/MarkerClusterer_min.js"></script>
+<script type="text/javascript" src="${ctxStatic}/map/AreaRestriction_min.js"></script>
 
 <body style="background:#fff;">
 <span id="message" class="uploadFile">${message }</span>
@@ -204,14 +210,20 @@
 	               markers : markersTemp
 	        });
 	        markerClusterer.setStyles(myStyles);
+	        //默认初始化 站点
+	        //searchStation();
 	        
 	        function searchStation(){
-                
+                alert("sera");
                /*  var orgName=$("#orgName").val();
                
                 var options=$("#orgArea option:selected");  //获取选中的项
                 var areaCode=options.val();   //拿到选中项的值 */
                 var category="";
+                var orgName="";
+                var areaCode = "";
+                var t = "${ctxFront}/node/getAllNodeList";
+                alert("ac"+t)
                /* if(areaCode == ""&&(orgName == "" ||orgName.trim().length==0)){
                     alert("请选择省份!");
                     return ;
@@ -226,18 +238,17 @@
                 } */
                  //这里是按学校名查,地区和类型为默认
                  map.clearOverlays();
-                     
+                  
                  $.ajax({
                        type : "get",
-                       url : "http://www.qiusuo.net.cn/area/getOrgList",
+                       url : "${ctxFront}/node/getAllNodeList",
                        data : {
-                           
                             "orgName":orgName,
                             "areaCode":areaCode,
                              "category":category
-                              
                        },
                        success : function(data) {
+                    	   //alert(data);
                             if(data.length==0){
                                 $("#msg").html("未查到相关信息").show();
                             }else{
@@ -257,6 +268,8 @@
             	//initMap();
                 var markers = new Array();
                 $.each(data,function(i, item) {
+                	alert(item.longitude);
+                	alert(item.latitude);
                     var point = new BMap.Point(item.longitude, item.latitude);
                     var marker = new BMap.Marker(point);
                                         marker.setIcon(myIcon2)
@@ -288,10 +301,18 @@
                 }
             }
         </script>
+        
+          <script type="text/javascript" >
+          	$(document).ready(function(){
+          		alert("redady!");
+          		searchStation();
+          		
+          	});
+          
+          </script>
  </body>
  
- 
- <script type="text/javascript" src="${ctxStatic}/js/jquery.flexslider-min.js" ></script>
+
  <!-- 
  <script type="text/javascript" src="${ctxStatic}/js/index.js"></script>
  <script type="text/javascript" src="${ctxStatic}/js/Designer.js"></script>

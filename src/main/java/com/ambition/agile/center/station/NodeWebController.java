@@ -4,27 +4,16 @@
 package com.ambition.agile.center.station;
 
 import java.util.List;
-import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.ambition.agile.common.config.Global;
-import com.ambition.agile.common.persistence.Page;
-import com.ambition.agile.common.utils.StringUtils;
 import com.ambition.agile.common.web.BaseController;
+import com.ambition.agile.modules.node.entity.Node;
+import com.ambition.agile.modules.node.service.NodeService;
 import com.ambition.agile.modules.station.entity.Station;
-import com.ambition.agile.modules.station.service.StationService;
 
 /**
  * 通信站Controller
@@ -32,13 +21,13 @@ import com.ambition.agile.modules.station.service.StationService;
  * @version 2018-04-25
  */
 @Controller
-@RequestMapping(value = "${frontPath}")
-public class StationWebController extends BaseController {
+@RequestMapping(value = "${frontPath}/node")
+public class NodeWebController extends BaseController {
 
 	
 	
 	@Autowired
-	private StationService stationService;
+	private NodeService nodeService;
 	
 //	@ModelAttribute
 //	public Station get(@RequestParam(required=false) String id) {
@@ -52,17 +41,26 @@ public class StationWebController extends BaseController {
 //		return entity;
 //	}
 	
+//	
+//	@RequestMapping(value="/getStationList", produces={"application/json; charset=UTF-8"})
+//	@ResponseBody
+//	public List<Station> getStationList() {
+//		
+//		Node node = new Node();
+//		logger.info("根据搜索名称、省份、进行查询站点 信息");
+//		List<Station>   stationList =nodeService.findList(station);
+//		//findAllList
+//		return  stationList;
+//		
+//	}
 	
-	@RequestMapping(value="/getStationList", produces={"application/json; charset=UTF-8"})
+	@RequestMapping(value="/getAllNodeList",produces={"application/json; charset=UTF-8"})
 	@ResponseBody
-	public List<Station> getStationList() {
-		
-		Station station = new Station();
-		logger.info("根据搜索名称、省份、进行查询站点 信息");
-		List<Station>   stationList =stationService.findList(station);
-		//findAllList
-		return  stationList;
-		
+	public List<Node> getAllNodeList(){
+		Node node = new Node();
+		List<Node> nodeList = nodeService.findList(node);
+		System.out.println(nodeList.toString());
+		return nodeList;
 	}
 	
 //	@RequiresPermissions("station:station:view")
