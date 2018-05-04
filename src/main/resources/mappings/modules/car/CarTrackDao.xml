@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ambition.agile.modules.car.dao.CarTrackDao">
+    
+	<sql id="carTrackColumns">
+		a.id AS "id",
+		a.car_id AS "carId",
+		a.longitude AS "longitude",
+		a.latitude AS "latitude",
+		a.create_date AS "createDate",
+		a.remarks AS "remarks"
+	</sql>
+	
+	<sql id="carTrackJoins">
+	</sql>
+    
+	<select id="get" resultType="CarTrack">
+		SELECT 
+			<include refid="carTrackColumns"/>
+		FROM car_track a
+		<include refid="carTrackJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CarTrack">
+		SELECT 
+			<include refid="carTrackColumns"/>
+		FROM car_track a
+		<include refid="carTrackJoins"/>
+		<where>
+			
+			<if test="carId != null and carId != ''">
+				AND a.car_id = #{carId}
+			</if>
+			<if test="longitude != null and longitude != ''">
+				AND a.longitude LIKE 
+					<if test="dbName == 'oracle'">'%'||#{longitude}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{longitude}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{longitude},'%')</if>
+			</if>
+			<if test="latitude != null and latitude != ''">
+				AND a.latitude LIKE 
+					<if test="dbName == 'oracle'">'%'||#{latitude}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{latitude}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{latitude},'%')</if>
+			</if>
+			<if test="createDate != null and createDate != ''">
+				AND a.create_date = #{createDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CarTrack">
+		SELECT 
+			<include refid="carTrackColumns"/>
+		FROM car_track a
+		<include refid="carTrackJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO car_track(
+			longitude,
+			latitude,
+			create_date,
+			remarks
+		) VALUES (
+			#{longitude},
+			#{latitude},
+			#{createDate},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE car_track SET 	
+			longitude = #{longitude},
+			latitude = #{latitude},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM car_track
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

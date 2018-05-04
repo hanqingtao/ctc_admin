@@ -7,17 +7,18 @@
  <head>
     <meta name="renderer" content="webkit">
  </head>
- <!-- 
-  <script type="text/javascript" src="${ctxStatic}/jquery/jquery-1.10.2.min.js"></script>
-  -->
+ 
+ 
+ <script type="text/javascript" src="${ctxStatic}/jquery/jquery-1.10.2.min.js"></script>
  <script type="text/javascript" src="${ctxStatic}/bootstrap/3.3.5/bootstrap.js"></script>
  <script type="text/javascript" src="${ctxStatic}/jquery/jquery.flexslider-min.js" ></script>
  <script type="text/javascript" src="${ctxStatic}/jquery/jquery.placeholder.min.js"></script>
   <script type="text/javascript" src="${ctxStatic}/map/baiduDitu.js"></script>
-<!-- <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=XOqpyuEGGwap3D2p6j4NIR2BrogIxDpX&v"></script> -->
 <script type="text/javascript" src="${ctxStatic}/map/TextIconOverlay_min.js"></script>
 <script type="text/javascript" src="${ctxStatic}/map/MarkerClusterer_min.js"></script>
 <script type="text/javascript" src="${ctxStatic}/map/AreaRestriction_min.js"></script>
+
+<!-- <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=XOqpyuEGGwap3D2p6j4NIR2BrogIxDpX&v"></script> -->
 
 <body style="background:#fff;">
 <span id="message" class="uploadFile">${message }</span>
@@ -184,8 +185,10 @@
             var map = new BMap.Map("allmap", {
                    minZoom:5,maxZoom:16,enableMapClick : false
             });
-        	map.centerAndZoom("锡林浩特",11);      // 初始化地图,用城市名设置地图中心点
-          //  map.centerAndZoom(new BMap.Point(105.331398, 37.897445), 5); //设置 中国
+        	//map.centerAndZoom("锡林郭勒盟",11);      // 初始化地图,用城市名设置地图中心点
+        	//map.centerAndZoom("锡林浩特市",12);      // 初始化地图,用城市名设置地图中心点
+        	map.centerAndZoom(new BMap.Point(116.061422, 43.942488),12);
+            //map.centerAndZoom(new BMap.Point(105.331398, 37.897445), 5); //设置 中国
             map.enableScrollWheelZoom();
             //map.disableDragging(); 
             //添加放大和缩小控件
@@ -196,14 +199,14 @@
             oveCtrl.setSize(new BMap.Size(200, 200));
 
             var myStyles = [{
-                url:  '../static/images/big11.png',
+                url:  '${ctxStatic}/images/big11.png',
                 size: new BMap.Size(38, 68),
                 opt_anchor: [16, 0],
                 textColor: '#ffffff',
                 opt_textSize: 10
             }];
            
-            var myIcon2 = new BMap.Icon("../static/images/red.png", new BMap.Size(30, 40));
+            var myIcon2 = new BMap.Icon("${ctxStatic}/images/red.png", new BMap.Size(30, 40));
             //添加聚合效果。
             var markersTemp = new Array();
 	        var markerClusterer = new BMapLib.MarkerClusterer(map, {
@@ -214,7 +217,7 @@
 	        //searchStation();
 	        
 	        function searchStation(){
-                alert("sera");
+               // alert("sera");
                /*  var orgName=$("#orgName").val();
                
                 var options=$("#orgArea option:selected");  //获取选中的项
@@ -223,7 +226,7 @@
                 var orgName="";
                 var areaCode = "";
                 var t = "${ctxFront}/node/getAllNodeList";
-                alert("ac"+t)
+                //alert("ac"+t)
                /* if(areaCode == ""&&(orgName == "" ||orgName.trim().length==0)){
                     alert("请选择省份!");
                     return ;
@@ -268,8 +271,8 @@
             	//initMap();
                 var markers = new Array();
                 $.each(data,function(i, item) {
-                	alert(item.longitude);
-                	alert(item.latitude);
+                	//alert(item.longitude);
+                	//alert(item.latitude);
                     var point = new BMap.Point(item.longitude, item.latitude);
                     var marker = new BMap.Marker(point);
                                         marker.setIcon(myIcon2)
@@ -304,7 +307,7 @@
         
           <script type="text/javascript" >
           	$(document).ready(function(){
-          		alert("redady!");
+          		//alert("redady!");
           		searchStation();
           		
           	});

@@ -19,6 +19,7 @@
 var ctx = '${ctx}', ctxStatic='${ctxStatic}',ctxFront='${ctxFront}';
 var imgServer = '${imgServer}';
 </script>
+<!-- 
 <script type="text/javascript" src="${ctxStatic}/jquery/jquery-1.10.2.min.js" ></script>
 <script type="text/javascript" src="${ctxStatic}/js/jquery.placeholder.min.js" ></script>
 <script type="text/javascript" src="${ctxStatic}/js/ajaxfileupload.js"></script>
@@ -27,5 +28,4 @@ var imgServer = '${imgServer}';
 <script type="text/javascript" src="${ctxStatic}/jquery-validation/1.11.1/localization/messages_zh.js" ></script>
 <script type="text/javascript" src="${ctxStatic}/js/jquery.qrcode.min.js" ></script>
 <script type="text/javascript" src="${ctxStatic}/js/common.js" ></script>
- 
-
+-->
