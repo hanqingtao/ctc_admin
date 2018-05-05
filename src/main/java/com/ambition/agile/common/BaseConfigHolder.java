@@ -54,6 +54,8 @@ public class BaseConfigHolder {
 	
 	public static Integer halfHour;
 	
+	public static String gpsSecretKey;
+	
 	public static void intiSystemValues(){
 		getAppName();
 		getAppKeyWord();
@@ -63,23 +65,25 @@ public class BaseConfigHolder {
 		getImgServer();
 		getSingleRedis();
 		getClusterRedis();
-		getGradeSchooleWorkPath();
-		getQualificationPath();
-		getSubjectUnitPath();
-		getGradeSchooleWorkPath();
-		getFlvServer();
-		getScormServer();
-		getIsMonitor();
-		getMonitorTime();
-		getHeartStart();
-		getHeartTime();
-		getIsMail();
-		getMailTo();
-		getMailFrom();
 		getLockCount();
 		getLockTimeOut();
 		getKey();
 		getServerDomain();
+		getGpsSecretKey();
+//		getGradeSchooleWorkPath();
+//		getQualificationPath();
+//		getSubjectUnitPath();
+//		getGradeSchooleWorkPath();
+//		getFlvServer();
+//		getScormServer();
+//		getIsMonitor();
+//		getMonitorTime();
+//		getHeartStart();
+//		getHeartTime();
+//		getIsMail();
+//		getMailTo();
+//		getMailFrom();
+
 	}
 	
 	public static Properties getProperties(){
@@ -182,6 +186,19 @@ public class BaseConfigHolder {
 		if(getFrameworkConfigReload()){
 			config = null;
 		}
+	}
+	
+	/**
+	 * 获取 gps 的 key 
+	 * @author harry
+	 * @date 2018-05-08 11:29:01
+	 * @return
+	 */
+	public static String getGpsSecretKey(){
+		if(gpsSecretKey == null){
+			gpsSecretKey = new String(getProperties().getProperty("base.gps.secretKey"));
+		}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+		return gpsSecretKey;
 	}
 	
 	/** 班级作业上传
@@ -424,6 +441,8 @@ public class BaseConfigHolder {
 		}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
 		return baseDomain;
 	}
+	
+	
 	public static void main(String[] args) {
 		System.out.println(BaseConfigHolder.subjectUnitPath);
 	}
