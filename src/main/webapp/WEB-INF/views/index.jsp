@@ -265,6 +265,8 @@
                        }
                    });
                  } 
+	       /*  points[0]=new BMap.Point(经度,纬度);   */
+	        var points=new Array()
 	        
             function init(data){
             	
@@ -276,11 +278,34 @@
                     var point = new BMap.Point(item.longitude, item.latitude);
                     var marker = new BMap.Marker(point);
                                         marker.setIcon(myIcon2)
-                                        var content = "<h4 style=' '>"+item.customer_name+"</h4>"+"<a href='http://"+item.domain+"' target='_blank'><img style='width:220px;height:55px' src='"+item.logo_path+"'/>";
+                                        var content = "<h4 style=' '>"+item.name+"</h4>";//+"<div style='width:220px;height:55px>前距离："+item.front+"后距离："+item.back+"</div>";
                                         addClickHandler(content, marker); //添加点击事件
                                         markers.push(marker);
+                                        points[i] =  new BMap.Point(item.longitude, item.latitude);
                                         
                 });
+                
+                
+                /*
+                
+                $.each(abc, function (item, value) {
+                        chartData.push(new BMap.Point(value.lan, value.yan));
+                    })
+                    for (var i = 0; i < chartData.length-1; i++) {
+                        var startPoint = chartData[i];
+                        var endPoint = chartData[i + 1];
+                        showPath(startPoint, endPoint);
+                    }
+
+                    $.each(abc, function (item, value) {
+                        var firstPoint = new BMap.Point(value.lan, value.yan);
+                        var m1 = new BMap.Marker(firstPoint);
+                        maps.addOverlay(m1);
+                        var lab1 = new BMap.Label(item+1, { position: firstPoint });
+                        maps.addOverlay(lab1);
+                    });
+                
+                */
                
                 markerClusterer.clearMarkers();
                 markerClusterer.addMarkers(markers);
@@ -290,6 +315,16 @@
                     enableMessage : true
                 //设置允许信息窗发送短息
                 };
+                
+                var polyline = new BMap.Polyline(  
+                		points,  
+                		{strokeColor:"red",//设置颜色  
+                		 strokeWeight:3, //宽度  
+                		strokeOpacity:0.5//透明度  
+                		 }  
+                	); 
+                
+                map.addOverlay(polyline);    
 
                 function addClickHandler(content, marker) {
                     marker.addEventListener("click", function(e) {

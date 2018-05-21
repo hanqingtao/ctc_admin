@@ -26,6 +26,15 @@ public class CarService extends CrudService<CarDao, Car> {
 		return super.get(id);
 	}
 	
+	@Transactional(readOnly = true)
+	public Car getCarByPlateNumber(String plateNumber) {
+		return this.dao.getCarByPlateNumber(plateNumber);
+	}
+
+//	public void deleteByRoomId(RoomPrice roomPrice) {
+//		((RoomPriceDao)this.dao).deleteByRoomId(roomPrice);
+//	}
+	
 	public List<Car> findList(Car car) {
 		return super.findList(car);
 	}

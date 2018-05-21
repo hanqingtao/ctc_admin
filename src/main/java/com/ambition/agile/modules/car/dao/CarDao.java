@@ -15,4 +15,6 @@ import com.ambition.agile.modules.car.entity.Car;
 @MyBatisDao
 public interface CarDao extends CrudDao<Car> {
 	
+	public Car getCarByPlateNumber(String plateNumber);
+	
 }

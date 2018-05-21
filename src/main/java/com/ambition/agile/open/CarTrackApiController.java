@@ -54,6 +54,15 @@ public class CarTrackApiController extends BaseController {
 	 * @param timestamp （请求时间, 1970 年到此时的秒数）
 	 * @param sign （签名, 所有参数名升序排列后拼接成字符串后跟密钥一起MD5）
 	 * @return
+	 * 
+	 * http://localhost:8080/ctc/mobile/gps/addpoint?plateNumber=nm888&longitude=40.1111&latitude=116.34343&timestamp=23423423424&sign=3434
+	 * 
+	 * http://yingyan.baidu.com/api/v3/track/addpoint?ak=lBBPrgP1Qaa0V3zQBc6gYuKi8TXcpklY&service_id=200466&entity_name=nm888&latitude=40.111&longitude=116.3444&loc_time=1488785466&coord_type_input=wgs84
+	 * 
+		latitude	纬度	double(-90.0 , +90.0)	是	
+		longitude	经度	double(-180.0 , +180.0)	是
+	 * 
+	 * 
 	 */
 	@RequestMapping(value="/gps/addpoint")
 	@ResponseBody
@@ -67,12 +76,12 @@ public class CarTrackApiController extends BaseController {
 			return ApiResponse.fail(500, "无法 获取 gps 数据！原因：参数有误。");
 		}
 		// 间隔时间判断（前后 间隔 1分钟内允许获取课程学习记录）
-		Date date = new Date();
-		long time = date.getTime()/1000 - Long.parseLong(timestamp);
-		if(time > 60 || time < -60){
-			logger.error("timestamp error...");
-			return ApiResponse.fail(500, "无法获取课程学习记录！原因：参数有误。");
-		}
+//		Date date = new Date();
+//		long time = date.getTime()/1000 - Long.parseLong(timestamp);
+//		if(time > 60 || time < -60){
+//			logger.error("timestamp error...");
+//			return ApiResponse.fail(500, "无法获取课程学习记录！原因：参数有误。");
+//		}
 		// 判断分校标识是否正确
 //		Map<String, Object> orgMap = orgWebApi.getOrgByOrgNameSn(corpid);
 //		if(orgMap == null){
@@ -81,20 +90,20 @@ public class CarTrackApiController extends BaseController {
 //		}
 //		
 		// 判断签名是否正确
-		String secretKey = BaseConfigHolder.getGpsSecretKey();
-		String params = "plateNumber=" + plateNumber + "longitude=" + longitude + "latitude=" + latitude + 
-				"timestamp=" + timestamp + secretKey;
-		if(!MD5Encrypt.encrypt(params).equals(sign)){
-			logger.error("sign error, params: " + params + "sign: " + sign);
-			return ApiResponse.fail(500, "获取 GPS 上传 记录！原因：签名,解密有误。");
-		}
+//		String secretKey = BaseConfigHolder.getGpsSecretKey();
+//		String params = "plateNumber=" + plateNumber + "longitude=" + longitude + "latitude=" + latitude + 
+//				"timestamp=" + timestamp + secretKey;
+//		if(!MD5Encrypt.encrypt(params).equals(sign)){
+//			logger.error("sign error, params: " + params + "sign: " + sign);
+//			return ApiResponse.fail(500, "获取 GPS 上传 记录！原因：签名,解密有误。");
+//		}
 		
 		//先根据车牌号查询
 		Car carTemp = new Car();
 		carTemp.setPlateNumber(plateNumber);
-		Car car = carService.get(carTemp);
+		Car car = carService.getCarByPlateNumber(plateNumber);
 		if(null == car || !StringUtils.isNotEmpty(car.getId())){
-			logger.error("plateNumber error, params: " + params + "sign: " + sign);
+			logger.error("plateNumber error, params: " + plateNumber + "sign: " + sign);
 			return ApiResponse.fail(500, "获取 GPS 的数据，车牌号有误！原因：车牌号不存在。");
 		}
 		
@@ -102,12 +111,12 @@ public class CarTrackApiController extends BaseController {
 		carTrack.setLatitude(latitude);
 		carTrack.setLongitude(longitude);
 		carTrack.setCarId(Integer.parseInt(car.getId()));
-		CarTrack carTrackTemp = carTrackService.get(carTrack);
+		//CarTrack carTrackTemp = carTrackService.get(carTrack);
 		
-		if(null == carTrackTemp || !StringUtils.isNotEmpty(carTrackTemp.getId())){
-			logger.error(" save car track , params: " + carTrackTemp.toString() );
-			carTrackService.save(carTrackTemp);
-		}
+		//if(null == carTrackTemp || !StringUtils.isNotEmpty(carTrackTemp.getId())){
+		logger.error(" save car track , params: " + carTrack.toString() );
+		carTrackService.save(carTrack);
+		//}
 		return ApiResponse.success("gps信息保存成功!");
 	}
 	

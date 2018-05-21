@@ -76,11 +76,13 @@
 	
 	<insert id="insert">
 		INSERT INTO car_track(
+			car_id,
 			longitude,
 			latitude,
 			create_date,
 			remarks
 		) VALUES (
+			#{carId},
 			#{longitude},
 			#{latitude},
 			#{createDate},

@@ -29,6 +29,14 @@
 		WHERE a.id = #{id}
 	</select>
 	
+	<select id="getCarByPlateNumber" resultType="Car">
+		SELECT 
+			<include refid="carColumns"/>
+		FROM car a
+		<include refid="carJoins"/>
+		WHERE a.plate_number = #{plateNumber} limit 1
+	</select>
+	
 	<select id="findList" resultType="Car">
 		SELECT 
 			<include refid="carColumns"/>
